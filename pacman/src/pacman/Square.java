@@ -8,16 +8,28 @@ import java.util.Arrays;
  */
 public class Square {
 	
-	public MazeMap getMazeMap() { throw new RuntimeException("Not yet implemented"); }
+	private MazeMap mazeMap;
 	
-	public int getRowIndex() { throw new RuntimeException("Not yet implemented"); }
+	private int rowIndex;
+	private int columnIndex;
 	
-	public int getColumnIndex() { throw new RuntimeException("Not yet implemented"); }
+	public MazeMap getMazeMap() { return mazeMap; }
 	
-	public boolean isPassable() { throw new RuntimeException("Not yet implemented"); }
+	public int getRowIndex() { return rowIndex; }
 	
-	public static Square of(MazeMap mazeMap, int rowIndex, int columnIndex) {
-		throw new RuntimeException("Not yet implemented");
+	public int getColumnIndex() { return columnIndex; }
+	
+	public boolean isPassable() { return mazeMap.isPassable(rowIndex, columnIndex); }
+	
+	public static Square of(MazeMap mazeMap, int rowIndex, int columnIndex) 
+	{
+		Square square = new Square();
+		
+		square.rowIndex = rowIndex;
+		square.columnIndex = columnIndex;
+		square.mazeMap = mazeMap;
+		
+		return square;
 	}
 	
 	/**
@@ -27,7 +39,18 @@ public class Square {
 	// No formal documentation required
 	public Square getNeighbor(Direction direction) {
 		// Implementation hint: use method java.lang.Math.floorMod.
-		throw new RuntimeException("Not yet implemented");
+		switch(direction)
+		{
+		case DOWN: 
+			break;
+		case UP: 
+			break;
+		case LEFT: 
+			break;
+		case RIGHT: 
+			break;
+		}
+		return null;
 	}
 
 	/**
