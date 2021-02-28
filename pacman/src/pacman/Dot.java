@@ -5,8 +5,10 @@ package pacman;
  */
 public class Dot {
 	
-	public Square getSquare() { throw new RuntimeException("Not yet implemented"); }
+	private Square square;
 	
-	public Dot(Square square) { throw new RuntimeException("Not yet implemented"); }
+	public Square getSquare() { return square; }
+	
+	public Dot(Square square) { this.square = square; }
 
 }

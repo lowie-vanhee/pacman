@@ -1,10 +1,13 @@
 package pacman;
 
+import java.lang.Math;
 import java.util.Arrays;
 
 /**
  * Each instance of this class represents a position in a maze, specified by a row index and a column index.
  * The top row and the leftmost column have index 0.
+ * 
+ * @immutable
  */
 public class Square {
 	
@@ -39,18 +42,22 @@ public class Square {
 	// No formal documentation required
 	public Square getNeighbor(Direction direction) {
 		// Implementation hint: use method java.lang.Math.floorMod.
+		
+		int rowOffset = 0;
+		int colOffset = 0;
+		
 		switch(direction)
 		{
-		case DOWN: 
-			break;
-		case UP: 
-			break;
-		case LEFT: 
-			break;
-		case RIGHT: 
-			break;
+		case DOWN:  rowOffset =  1; break;
+		case UP:	rowOffset = -1; break;
+		case RIGHT: colOffset =  1; break;
+		case LEFT:  colOffset = -1; break;
 		}
-		return null;
+		
+		int neighborRowIndex    = Math.floorMod(rowIndex + rowOffset,    mazeMap.getHeight());
+		int neighborColumnIndex = Math.floorMod(columnIndex + colOffset, mazeMap.getWidth());
+		
+		return Square.of(this.mazeMap, neighborRowIndex, neighborColumnIndex);
 	}
 
 	/**
@@ -58,7 +65,10 @@ public class Square {
 	 */
 	// No formal documentation required
 	public boolean canMove(Direction direction) {
-		throw new RuntimeException("Not yet implemented");
+		
+		Square neighbor = getNeighbor(direction);
+		
+		return neighbor.isPassable();
 	}
 
 	/**
@@ -67,14 +77,22 @@ public class Square {
 	 */
 	// No formal documentation required
 	public Direction[] getPassableDirectionsExcept(Direction excludedDirection) {
-		throw new RuntimeException("Not yet implemented");
+		
+		Direction[] passableDirections = new Direction[4];
+		
+		int i = 0;
+		
+		for(Direction direction : Direction.values())
+			if(direction != excludedDirection && getNeighbor(direction).isPassable()) passableDirections[i++] = direction; 
+		
+		return Arrays.copyOf(passableDirections, i);
 	}
 	
 	/**
 	 * Returns whether the given square refers to the same {@code MazeMap} object and has the same row and column index as this square.  
 	 */
 	public boolean equals(Square other) {
-		throw new RuntimeException("Not yet implemented");
+		return (this.mazeMap == other.mazeMap && this.rowIndex == other.rowIndex && this.columnIndex == other.columnIndex);
 	}
 	
 }

@@ -7,18 +7,21 @@ import java.util.Random;
  */
 public class Ghost {
 	
-	public Square getSquare() { throw new RuntimeException("Not yet implemented"); }
+	private Square square;
+	private Direction direction;
+	
+	public Square getSquare() { return square; }
 	
 	/**
 	 * Returns the direction in which this ghost will preferably move next.
 	 */
-	public Direction getDirection() { throw new RuntimeException("Not yet implemented"); }
+	public Direction getDirection() { return direction; }
 	
-	public Ghost(Square square, Direction direction) { throw new RuntimeException("Not yet implemented"); }
+	public Ghost(Square square, Direction direction) { this.square = square; this.direction = direction;}
 	
-	public void setSquare(Square square) { throw new RuntimeException("Not yet implemented"); }
+	public void setSquare(Square square) { this.square = square; }
 	
-	public void setDirection(Direction direction) { throw new RuntimeException("Not yet implemented"); }
+	public void setDirection(Direction direction) { this.direction = direction; }
 	
 	private static int MOVE_FORWARD_PREFERENCE = 10;
 	

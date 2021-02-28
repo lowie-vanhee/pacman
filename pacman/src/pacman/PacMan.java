@@ -5,19 +5,23 @@ package pacman;
  */
 public class PacMan {
 	
-	public Square getSquare() { throw new RuntimeException("Not yet implemented"); }
+	private int nbLives;
+	private Square square;
 	
-	public int getNbLives() { throw new RuntimeException("Not yet implemented"); }
+	public Square getSquare() { return square; }
+	
+	public int getNbLives() { return nbLives; }
 
 	public PacMan(int nbLives, Square square) {
-		throw new RuntimeException("Not yet implemented");
+		this.nbLives = nbLives;
+		this.square  = square;
 	}
 	
-	public void setSquare(Square square) { throw new RuntimeException("Not yet implemented"); }
+	public void setSquare(Square square) { this.square = square; }
 	
 	/**
 	 * Decreases this Pac-Man character's number of lives by one.
 	 */
-	public void die() { throw new RuntimeException("Not yet implemented"); }
+	public void die() { this.nbLives--; }
 
 }
