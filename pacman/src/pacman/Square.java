@@ -8,22 +8,62 @@ import java.util.Arrays;
  * The top row and the leftmost column have index 0.
  * 
  * @immutable
+ * 
+ * @invar the mazeMap is never {@code: null}
+ * 		| getMazeMap() != null
+ * @invar the rowIndex is always between 0 and the height of the mazeMap
+ * 		| getRowIndex() >= 0 && getMazeMap().getHeight() >= getRowIndex()
+ * @invar the columnIndex is always between 0 and the width of the mazeMap
+ * 		| getColumnIndex() >= 0 && getMazeMap().getWidth() >= getColumnIndex()
  */
 public class Square {
 	
+	/**
+	 * @invar | mazeMap != null
+	 * @RepresentationObject
+	 */
 	private MazeMap mazeMap;
 	
+	/**
+	 * @invar | rowIndex >= 0 && mazeMap.getHeight() >= rowIndex
+	 * @invar | columnIndex >= 0 && mazeMap.getWidth() >= columnIndex
+	 */
 	private int rowIndex;
 	private int columnIndex;
 	
+	/**
+	 * @basic
+	 */
 	public MazeMap getMazeMap() { return mazeMap; }
 	
+	/**
+	 * @basic
+	 */
 	public int getRowIndex() { return rowIndex; }
 	
+	/**
+	 * @basic
+	 */
 	public int getColumnIndex() { return columnIndex; }
 	
+	/**
+	 * @post | result == getMazeMap().isPassable(getRowIndex(), getColumnIndex())
+	 */
 	public boolean isPassable() { return mazeMap.isPassable(rowIndex, columnIndex); }
 	
+	/**
+	 * @throws IllegalArgumentException if mazeMap is null
+	 * 		| mazeMap == null
+	 * @throws IllegalArgumentException if rowIndex is negative
+	 * 		| rowIndex < 0
+	 * @throws IllegalArgumentException if columnIndex is negative
+	 * 		| columnIndex < 0
+	 * 
+	 * @post The result is not {@code: null}
+	 * 		| result != null
+	 *
+	 */
+	//@post | result == 
 	public static Square of(MazeMap mazeMap, int rowIndex, int columnIndex) 
 	{
 		Square square = new Square();
@@ -89,7 +129,13 @@ public class Square {
 	}
 	
 	/**
-	 * Returns whether the given square refers to the same {@code MazeMap} object and has the same row and column index as this square.  
+	 * Returns whether the given square refers to the same {@code MazeMap} object and has the same row and column index as this square.
+	 * @throws IllegalArgumentException if other is {@code: null}
+	 * 		| other == null 
+	 * 
+	 * @inspects | other
+	 * 
+	 * @post | result == (getMazeMap() == other.getMazeMap() && getRowIndex() == other.getRowIndex() && getColumnIndex() == other.getColumnIndex()) 
 	 */
 	public boolean equals(Square other) {
 		return (this.mazeMap == other.mazeMap && this.rowIndex == other.rowIndex && this.columnIndex == other.columnIndex);
