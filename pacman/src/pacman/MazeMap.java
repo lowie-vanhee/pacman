@@ -1,10 +1,14 @@
 package pacman;
 
+import java.util.stream.IntStream;
+
 /**
  * Each instance of this class represents a maze layout, specifying the width and height of the maze
  * and, for each position in the maze, whether it is passable or not.
  * 
  * @immutable
+ * 
+ * public class invariants
  * 
  * @invar the width is always positive or zero 
  * 		  | getWidth() >= 0
@@ -14,6 +18,8 @@ package pacman;
 public class MazeMap {
 	
 	/**
+	 * private class invariants
+	 * 
 	 * @invar | passable != null
 	 * @invar | passable.length == width*height
 	 * @invar | (width >= 0) && (height >= 0)
@@ -51,17 +57,17 @@ public class MazeMap {
 	 * @throws IllegalArgumentException	if columnIndex is not between 0 and width
 	 * 		   | columnIndex < 0 || columnIndex > getWidth()
 	 * 
-	 * @post The result is true if the square is passable| result == passable[rowIndex*getWidth()+columnIndex]
+	 * @basic
 	 */
 	public boolean isPassable(int rowIndex, int columnIndex) { 
 		
-		if(rowIndex < 0 || rowIndex > height)
-			throw new IllegalArgumentException("rowIndex must be between 0 and height");
-		if(columnIndex < 0 || columnIndex > width)
+		if(rowIndex < 0 || rowIndex >= height)
+			throw new IllegalArgumentException("The given rowIndex "+rowIndex+" must be between 0 and height");
+		if(columnIndex < 0 || columnIndex >= width)
 			throw new IllegalArgumentException("columnIndex must be between 0 and width");
 		
 		return passable[rowIndex*width+columnIndex];
-		}
+	}
 	
 	/**
 	 * Initializes this object so that it represents a maze layout with the given width, height, and
@@ -81,6 +87,10 @@ public class MazeMap {
 	 * @post   | getWidth() == width
 	 * @post   | getHeight() == height
 	 * 
+	 * @post   
+	 * 		   | IntStream.range(0, getHeight()).allMatch(row ->
+	 * 		   |	 IntStream.range(0, getWidth()).allMatch(col ->
+	 * 		   |	 	isPassable(row,col) == passable[row*getHeight()+col]))
 	 * 
 	 */
 	public MazeMap(int width, int height, boolean[] passable) 

@@ -1,6 +1,7 @@
 package pacman;
 
 import java.lang.Math;
+import java.util.stream.IntStream;
 import java.util.Arrays;
 
 /**
@@ -8,24 +9,78 @@ import java.util.Arrays;
  * The top row and the leftmost column have index 0.
  * 
  * @immutable
+ * 
+ * public class invariants:
+ * 
+ * @invar the mazeMap is never {@code: null} | getMazeMap() != null
+ * 
+ * @invar the rowIndex is always between 0 and the height of the mazeMap 
+ * 		  | getRowIndex() >= 0 && getRowIndex() < getMazeMap().getHeight()
+ * @invar the columnIndex is always between 0 and the width of the mazeMap 
+ * 		  | getColumnIndex() >= 0 && getColumnIndex() < getMazeMap().getWidth()
  */
 public class Square {
+	
+	/**
+	 * private class invariants:
+	 * 
+	 * @invar | mazeMap != null
+	 * 
+	 * @invar | rowIndex >= 0 && rowIndex < mazeMap.getHeight()
+	 * @invar | columnIndex >= 0 && columnIndex < mazeMap.getWidth()
+	 */
 	
 	private MazeMap mazeMap;
 	
 	private int rowIndex;
 	private int columnIndex;
 	
+	/**
+	 * Returns the (immutable) MazeMap object of which this square is part of
+	 * @basic
+	 */
 	public MazeMap getMazeMap() { return mazeMap; }
 	
+	/**
+	 * Returns this square's row index
+	 * @basic
+	 */
 	public int getRowIndex() { return rowIndex; }
 	
+	/**
+	 * Returns this square's column index
+	 * @basic
+	 */
 	public int getColumnIndex() { return columnIndex; }
 	
+	/**
+	 * Returns whether this square is passable in the square's corresponding maze map
+	 * @inspects | this
+	 * @post Returns whether this square is passable in the corresponding maze map | result == getMazeMap().isPassable(getRowIndex(), getColumnIndex())
+	 */
 	public boolean isPassable() { return mazeMap.isPassable(rowIndex, columnIndex); }
 	
+	/**
+	 * Constructs a square object of the given maze map at the given row index and column index
+	 * @creates | result
+	 * 
+	 * @throws IllegalArgumentException if mazeMap is {@code null} | mazeMap == null
+	 * @throws IllegalArgumentException if rowIndex is negative or not less than the mazeMap's height| rowIndex < 0 || rowIndex >= mazeMap.getHeight()
+	 * @throws IllegalArgumentException if columnIndex is negative or not less than the mazeMap's width| columnIndex < 0 || columnIndex >= mazeMap.getWidth()
+	 * 
+	 * @post | result.getMazeMap() == mazeMap
+	 * @post | result.getRowIndex() == rowIndex
+	 * @post | result.getColumnIndex() == columnIndex
+	 */
 	public static Square of(MazeMap mazeMap, int rowIndex, int columnIndex) 
 	{
+		if(mazeMap == null)
+			throw new IllegalArgumentException("MazeMap cannot be null");
+		if(rowIndex < 0 || rowIndex >= mazeMap.getHeight())
+			throw new IllegalArgumentException("rowIndex must be between 0 and the height of the mazeMap");
+		if(columnIndex < 0 || columnIndex >= mazeMap.getWidth())
+			throw new IllegalArgumentException("columnIndex must be between 0 and the width of the mazeMap");
+		
 		Square square = new Square();
 		
 		square.rowIndex = rowIndex;
@@ -90,8 +145,16 @@ public class Square {
 	
 	/**
 	 * Returns whether the given square refers to the same {@code MazeMap} object and has the same row and column index as this square.  
+	 * @inspects | this, other
+	 * 
+	 * @throws if other is null | other == null
+	 * 
+	 * @post | result == (this.getMazeMap() == other.getMazeMap() && this.getRowIndex() == other.getRowIndex() && this.getColumnIndex() == other.getColumnIndex())
 	 */
 	public boolean equals(Square other) {
+		if(other == null)
+			throw new IllegalArgumentException("other cannot be null");
+		
 		return (this.mazeMap == other.mazeMap && this.rowIndex == other.rowIndex && this.columnIndex == other.columnIndex);
 	}
 	
