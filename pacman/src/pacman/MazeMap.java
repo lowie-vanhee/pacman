@@ -90,7 +90,7 @@ public class MazeMap {
 	 * @post   
 	 * 		   | IntStream.range(0, getHeight()).allMatch(row ->
 	 * 		   |	 IntStream.range(0, getWidth()).allMatch(col ->
-	 * 		   |	 	isPassable(row,col) == passable[row*getHeight()+col]))
+	 * 		   |	 	isPassable(row,col) == passable[row*getWidth()+col]))
 	 * 
 	 */
 	public MazeMap(int width, int height, boolean[] passable) 

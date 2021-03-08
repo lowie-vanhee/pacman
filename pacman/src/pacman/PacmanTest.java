@@ -8,9 +8,15 @@ class PacmanTest {
 
 	@Test
 	void test() {
-		MazeMap map = new MazeMap(2,2,new boolean[] {true,true,false,true});
 		
-		assert map.isPassable(1,0) == false;
+		//passable is in row-major order
+		boolean[] passable = {true,  true,  true,
+							  false, false, true,
+							  true,  false, true,
+							  false, false, false};
+		
+		MazeMap map = new MazeMap(3, 4, passable);
+		
 	}
 
 }
