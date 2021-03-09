@@ -93,8 +93,8 @@ public class MazeMap {
 	 * 		   |	 	isPassable(row,col) == passable[row*getWidth()+col]))
 	 * 
 	 */
-	public MazeMap(int width, int height, boolean[] passable) 
-	{
+	public MazeMap(int width, int height, boolean[] passable) {
+		
 		if(passable == null)
 			throw new IllegalArgumentException("The given passable array must not be null");
 		

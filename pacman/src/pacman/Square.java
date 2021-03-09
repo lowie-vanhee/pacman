@@ -12,7 +12,7 @@ import java.util.Arrays;
  * 
  * public class invariants:
  * 
- * @invar the mazeMap is never {@code: null} | getMazeMap() != null
+ * @invar the mazeMap is never {@code null} | getMazeMap() != null
  * 
  * @invar the rowIndex is always between 0 and the height of the mazeMap 
  * 		  | getRowIndex() >= 0 && getRowIndex() < getMazeMap().getHeight()
@@ -72,8 +72,8 @@ public class Square {
 	 * @post | result.getRowIndex() == rowIndex
 	 * @post | result.getColumnIndex() == columnIndex
 	 */
-	public static Square of(MazeMap mazeMap, int rowIndex, int columnIndex) 
-	{
+	public static Square of(MazeMap mazeMap, int rowIndex, int columnIndex) {
+		
 		if(mazeMap == null)
 			throw new IllegalArgumentException("MazeMap cannot be null");
 		if(rowIndex < 0 || rowIndex >= mazeMap.getHeight())
@@ -81,13 +81,18 @@ public class Square {
 		if(columnIndex < 0 || columnIndex >= mazeMap.getWidth())
 			throw new IllegalArgumentException("columnIndex must be between 0 and the width of the mazeMap");
 		
-		Square square = new Square();
-		
-		square.rowIndex = rowIndex;
-		square.columnIndex = columnIndex;
-		square.mazeMap = mazeMap;
+		Square square = new Square(mazeMap, rowIndex, columnIndex);
 		
 		return square;
+	}
+	
+	/**
+	 * Constructor marked as private as client should use Square.of(...) method for retrieving an (immutable) Square object, instead of calling the constructor directly
+	 */
+	private Square(MazeMap mazeMap, int rowIndex, int columnIndex) {
+		this.rowIndex = rowIndex;
+		this.columnIndex = columnIndex;
+		this.mazeMap = mazeMap;
 	}
 	
 	/**
@@ -103,10 +108,10 @@ public class Square {
 		
 		switch(direction)
 		{
-		case DOWN:  rowOffset =  1; break;
-		case UP:	rowOffset = -1; break;
-		case RIGHT: colOffset =  1; break;
-		case LEFT:  colOffset = -1; break;
+			case DOWN:  rowOffset =  1; break;
+			case UP:	rowOffset = -1; break;
+			case RIGHT: colOffset =  1; break;
+			case LEFT:  colOffset = -1; break;
 		}
 		
 		int neighborRowIndex    = Math.floorMod(rowIndex + rowOffset,    mazeMap.getHeight());
