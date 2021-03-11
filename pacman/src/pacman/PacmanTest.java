@@ -12,14 +12,14 @@ class PacmanTest {
 	@Test
 	void test()
 	{
-		/* MazeMap Unit Test */
+		/* MazeMap */
 		
 		//passable is in row-major order
 		boolean[] passable = {true,  true,  true,
 							  false, false, true,
 							  true,  false, true,
 							  false, false, false};
-				
+		
 		int mapWidth = 3;
 		int mapHeight = 4;
 						
@@ -41,7 +41,7 @@ class PacmanTest {
 		
 		assert Arrays.equals(passable, retrievedPassable);
 		
-		/* Square Unit Test */
+		/* Square */
 		
 		int squareRowIndex = 0;
 		int squareColumnIndex = 2;
@@ -94,12 +94,40 @@ class PacmanTest {
 		
 		/* PacMan */
 		
+		int lives = 2;
+		
+		PacMan pacman = new PacMan(lives, square2);
+		
+		assert pacman.getNbLives() == lives;
+		assert pacman.getSquare() == square2;
+		
+		pacman.setSquare(square3);
+		
+		assert pacman.getSquare() == square3;
+		
+		pacman.die();
+		assert pacman.getNbLives() == --lives;
+		pacman.die();
+		assert pacman.getNbLives() == --lives;
 		
 		/* Dot */
 		
 		Dot dot = new Dot(square2);
 		
 		assert dot.getSquare() == square2;
+		
+		/* Ghost */
+		
+		Ghost ghost = new Ghost(square2, Direction.LEFT);
+		
+		assert ghost.getSquare() == square2;
+		assert ghost.getDirection() == Direction.LEFT;
+		
+		ghost.setSquare(square3);
+		assert ghost.getSquare() == square3;
+		
+		ghost.setDirection(Direction.UP);
+		assert ghost.getDirection() == Direction.UP;
 		
 	}
 	
