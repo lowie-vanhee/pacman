@@ -71,6 +71,7 @@ public class Square {
 	 * @post | result.getMazeMap() == mazeMap
 	 * @post | result.getRowIndex() == rowIndex
 	 * @post | result.getColumnIndex() == columnIndex
+	 * @post | result != null
 	 */
 	public static Square of(MazeMap mazeMap, int rowIndex, int columnIndex) {
 		
