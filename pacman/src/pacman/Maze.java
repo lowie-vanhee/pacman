@@ -9,7 +9,7 @@ public class Maze {
 	private MazeMap map;
 	private PacMan pacMan;
 	private Ghost[] ghosts;
-	private Dot[] dots;
+	private FoodItem[] dots;
 	
 	public MazeMap getMap() { return map; }
 	
@@ -17,7 +17,9 @@ public class Maze {
 	
 	public Ghost[] getGhosts() { return ghosts.clone(); }
 	
-	public Dot[] getDots() { return dots.clone(); }
+	public FoodItem[] getDots() { return dots.clone(); }
+	
+	public FoodItem[] getFoodItems() { return dots.clone(); }
 	
 	public Maze(Random random, MazeMap map, PacMan pacMan, Ghost[] ghosts, Dot[] dots) {
 		this.random = random;
@@ -44,7 +46,7 @@ public class Maze {
 	}
 	
 	private void removeDotAtIndex(int index) {
-		Dot[] newDots = new Dot[dots.length - 1];
+		FoodItem[] newDots = new Dot[dots.length - 1];
 		System.arraycopy(dots, 0, newDots, 0, index);
 		System.arraycopy(dots, index + 1, newDots, index, newDots.length - index);
 		dots = newDots;
@@ -53,11 +55,19 @@ public class Maze {
 	private void removeDotAtSquare(Square square) {
 		for (int i = 0; i < dots.length; i++) {
 			if (dots[i].getSquare().equals(square)) {
+				//Check if pacman ate a powerpellet
+				if(dots[i].isPowerPellet()) {
+					//Make all the ghosts aware that pacman is now STRONK
+					for(int ghostIndex = 0; ghostIndex < ghosts.length; ghostIndex++) {
+						ghosts[ghostIndex].pacManAtePowerPellet();
+					}
+				}
 				removeDotAtIndex(i);
 				return;
 			}
 		}
 	}
+	
 	
 	public void movePacMan(Direction direction) {
 		Square newSquare = pacMan.getSquare().getNeighbor(direction);

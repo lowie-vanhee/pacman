@@ -20,6 +20,9 @@ public class MazeDescriptions {
 		int nbDots = 0;
 		Dot[] dots = new Dot[width * height];
 		
+		int nbPowerPellets = 0;
+		PowerPellet[] powerPellets = new PowerPellet[width * height];
+		
 		int nbGhosts = 0;
 		Ghost[] ghosts = new Ghost[width * height];
 		
@@ -48,6 +51,7 @@ public class MazeDescriptions {
 						throw new IllegalArgumentException("Maze description contains multiple P characters");
 					pacMan = new PacMan(3, Square.of(map, row, column));
 				}
+				case 'p' -> powerPellets[nbPowerPellets++] = new PowerPellet(Square.of(map, row, column));
 				default -> throw new IllegalArgumentException("Invalid character in maze description: " + c);
 				}
 			}

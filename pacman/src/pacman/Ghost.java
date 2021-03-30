@@ -17,8 +17,20 @@ public class Ghost {
 	 * @invar | direction != null
 	 */
 	
+	private GhostState state = RegularGhostState.INSTANCE;
+
 	private Square square;
 	private Direction direction;
+	
+	
+	public boolean isVulnerable() {
+		return state.isVulnerable();
+	}
+	
+	public void pacManAtePowerPellet() {
+		direction = direction.getOpposite();
+		this.state = VulnerableGhostState.INSTANCE;
+	}
 	
 	/**
 	 * Returns the square where this ghost is located at
