@@ -107,8 +107,10 @@ public class Ghost {
 	}
 	
 	// No formal document required
-	public void move(Random random) {
+	public void reallyMove(Random random) {
 		setDirection(chooseNextMoveDirection(random));
 		setSquare(getSquare().getNeighbor(getDirection()));
 	}
+	
+	public void move(Random random) { state = state.move(this, random); }
 }
