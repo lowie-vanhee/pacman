@@ -37,7 +37,8 @@ public abstract class FoodItem {
 	
 	
 	/**
-	 * DOCUMENTATIE SCHRIOCJJNEN 
+	 * DOCUMENTATIE SCHRIOCJJNEN, moet hier nog iets anders dan basic?
+	 * @basic
 	 */
 	public abstract int getSize();
 	
