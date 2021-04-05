@@ -9,6 +9,11 @@ public class Dot extends FoodItem{
 	}
 
 	@Override
+	/**
+	 * Returns the size of the FoodItem relative to the size of the dot
+	 * @basic
+	 * @post result == 1
+	 */
 	public int getSize() {
 		return 1;
 	}

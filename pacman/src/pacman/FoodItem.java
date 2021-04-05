@@ -37,8 +37,10 @@ public abstract class FoodItem {
 	
 	
 	/**
-	 * DOCUMENTATIE SCHRIOCJJNEN, moet hier nog iets anders dan basic?
+	 * Returns the size of the FoodItem relative to the size of the dot
 	 * @basic
+	 * @post result >= 0;
+	 * @post (!isPowerPellet())? result == 1 : true
 	 */
 	public abstract int getSize();
 	

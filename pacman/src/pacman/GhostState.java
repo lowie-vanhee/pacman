@@ -10,8 +10,7 @@ public abstract class GhostState {
 		return false;
 	}
 	
-	public GhostState move(Ghost ghost, Random random) {
-		return null; //idk what to do here die man zen uitleg is fking vaag
-	}
+	public abstract GhostState move(Ghost ghost, Random random);
 
+	public abstract GhostState hitBy(Ghost ghost, PacMan pacMan);
 }

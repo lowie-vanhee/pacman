@@ -17,11 +17,12 @@ public class Ghost {
 	 * @invar | direction != null
 	 */
 	
-	private GhostState state = RegularGhostState.INSTANCE;
+	private GhostState state = new RegularGhostState();
 
 	private Square square;
 	private Direction direction;
 	
+	private Square originalSquare;
 	
 	public boolean isVulnerable() {
 		return state.isVulnerable();
@@ -29,7 +30,7 @@ public class Ghost {
 	
 	public void pacManAtePowerPellet() {
 		direction = direction.getOpposite();
-		this.state = VulnerableGhostState.INSTANCE;
+		this.state = new VulnerableGhostState();
 	}
 	
 	/**
@@ -37,6 +38,8 @@ public class Ghost {
 	 * @basic
 	 */
 	public Square getSquare() { return square; }
+	
+	public Square getOriginalSquare() {return originalSquare;}
 	
 	/**
 	 * Returns the direction in which this ghost will preferably move next.
@@ -60,6 +63,7 @@ public class Ghost {
 			throw new IllegalArgumentException("The given direction cannot be null");
 		
 		this.square = square; 
+		this.originalSquare = square;
 		this.direction = direction;
 	}
 	
@@ -112,5 +116,11 @@ public class Ghost {
 		setSquare(getSquare().getNeighbor(getDirection()));
 	}
 	
-	public void move(Random random) { state = state.move(this, random); }
+	public void move(Random random) { 
+		state = state.move(this, random);
+	}
+	
+	public void hitBy(PacMan pacMan) {
+		state = state.hitBy(this, pacMan);
+	}
 }

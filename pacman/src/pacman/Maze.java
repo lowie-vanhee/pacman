@@ -9,7 +9,7 @@ public class Maze {
 	private MazeMap map;
 	private PacMan pacMan;
 	private Ghost[] ghosts;
-	private FoodItem[] dots;
+	private FoodItem[] foodItems;
 	
 	public MazeMap getMap() { return map; }
 	
@@ -17,26 +17,24 @@ public class Maze {
 	
 	public Ghost[] getGhosts() { return ghosts.clone(); }
 	
-	public FoodItem[] getDots() { return dots.clone(); }
+	public FoodItem[] getFoodItems() { return foodItems.clone(); }
 	
-	public FoodItem[] getFoodItems() { return dots.clone(); }
-	
-	public Maze(Random random, MazeMap map, PacMan pacMan, Ghost[] ghosts, Dot[] dots) {
+	public Maze(Random random, MazeMap map, PacMan pacMan, Ghost[] ghosts, FoodItem[] foodItems) {
 		this.random = random;
 		this.map = map;
 		this.pacMan = pacMan;
 		this.ghosts = ghosts.clone();
-		this.dots = dots.clone();
+		this.foodItems = foodItems.clone();
 	}
 	
 	public boolean isCompleted() {
-		return dots.length == 0;
+		return foodItems.length == 0;
 	}
 	
 	private void checkPacManDamage() {
 		for (Ghost ghost : ghosts)
 			if (ghost.getSquare().equals(pacMan.getSquare()))
-				pacMan.die();
+				ghost.hitBy(pacMan);
 	}
 	
 	public void moveGhosts() {
@@ -46,17 +44,17 @@ public class Maze {
 	}
 	
 	private void removeDotAtIndex(int index) {
-		FoodItem[] newDots = new Dot[dots.length - 1];
-		System.arraycopy(dots, 0, newDots, 0, index);
-		System.arraycopy(dots, index + 1, newDots, index, newDots.length - index);
-		dots = newDots;
+		FoodItem[] newFoodItems = new FoodItem[foodItems.length - 1];
+		System.arraycopy(foodItems, 0, newFoodItems, 0, index);
+		System.arraycopy(foodItems, index + 1, newFoodItems, index, newFoodItems.length - index);
+		foodItems = newFoodItems;
 	}
 	
 	private void removeDotAtSquare(Square square) {
-		for (int i = 0; i < dots.length; i++) {
-			if (dots[i].getSquare().equals(square)) {
+		for (int i = 0; i < foodItems.length; i++) {
+			if (foodItems[i].getSquare().equals(square)) {
 				//Check if pacman ate a powerpellet
-				if(dots[i].isPowerPellet()) {
+				if(foodItems[i].isPowerPellet()) {
 					//Make all the ghosts aware that pacman is now STRONK
 					for(int ghostIndex = 0; ghostIndex < ghosts.length; ghostIndex++) {
 						ghosts[ghostIndex].pacManAtePowerPellet();
