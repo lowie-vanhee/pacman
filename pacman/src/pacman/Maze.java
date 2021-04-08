@@ -53,19 +53,17 @@ public class Maze {
 	private void removeDotAtSquare(Square square) {
 		for (int i = 0; i < foodItems.length; i++) {
 			if (foodItems[i].getSquare().equals(square)) {
-				//Check if pacman ate a powerpellet
-				if(foodItems[i].isPowerPellet()) {
-					//Make all the ghosts aware that pacman is now STRONK
-					for(int ghostIndex = 0; ghostIndex < ghosts.length; ghostIndex++) {
-						ghosts[ghostIndex].pacManAtePowerPellet();
-					}
-				}
+				foodItems[i].eatenByPacMan(this);
 				removeDotAtIndex(i);
 				return;
 			}
 		}
 	}
 	
+	public void pacManAtePP() {
+		for(int ghostIndex = 0; ghostIndex < ghosts.length; ghostIndex++)
+		{ ghosts[ghostIndex].pacManAtePowerPellet(); }
+	}
 	
 	public void movePacMan(Direction direction) {
 		Square newSquare = pacMan.getSquare().getNeighbor(direction);

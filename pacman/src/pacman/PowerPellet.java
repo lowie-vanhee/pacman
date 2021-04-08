@@ -7,11 +7,6 @@ public class PowerPellet extends FoodItem{
 		super(square);
 	}
 	
-	@Override
-	public boolean isPowerPellet() {
-		return true;
-	}
-	
 
 	@Override
 	/**
@@ -21,5 +16,10 @@ public class PowerPellet extends FoodItem{
 	 */
 	public int getSize() {
 		return 2;
+	}
+
+	@Override
+	public void eatenByPacMan(Maze maze) {
+		maze.pacManAtePP();
 	}
 }

@@ -40,12 +40,9 @@ public abstract class FoodItem {
 	 * Returns the size of the FoodItem relative to the size of the dot
 	 * @basic
 	 * @post result >= 0;
-	 * @post (!isPowerPellet())? result == 1 : true
 	 */
 	public abstract int getSize();
 	
-	public boolean isPowerPellet() {
-		return false;
-	}
-
+	public abstract void eatenByPacMan(Maze maze);
+	
 }

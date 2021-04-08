@@ -7,6 +7,8 @@ public class Dot extends FoodItem{
 	{
 		super(square);
 	}
+	
+	
 
 	@Override
 	/**
@@ -17,5 +19,10 @@ public class Dot extends FoodItem{
 	public int getSize() {
 		return 1;
 	}
+
+
+
+	@Override
+	public void eatenByPacMan(Maze maze) {/*pacman ate no pp today :( #gay rights*/}
 
 }
