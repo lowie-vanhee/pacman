@@ -43,18 +43,18 @@ public class Maze {
 		checkPacManDamage();
 	}
 	
-	private void removeDotAtIndex(int index) {
+	private void removeFoodItemAtIndex(int index) {
 		FoodItem[] newFoodItems = new FoodItem[foodItems.length - 1];
 		System.arraycopy(foodItems, 0, newFoodItems, 0, index);
 		System.arraycopy(foodItems, index + 1, newFoodItems, index, newFoodItems.length - index);
 		foodItems = newFoodItems;
 	}
 	
-	private void removeDotAtSquare(Square square) {
+	private void removeFoodItemAtSquare(Square square) {
 		for (int i = 0; i < foodItems.length; i++) {
 			if (foodItems[i].getSquare().equals(square)) {
 				foodItems[i].eatenByPacMan(this);
-				removeDotAtIndex(i);
+				removeFoodItemAtIndex(i);
 				return;
 			}
 		}
@@ -69,7 +69,7 @@ public class Maze {
 		Square newSquare = pacMan.getSquare().getNeighbor(direction);
 		if (newSquare.isPassable()) {
 			pacMan.setSquare(newSquare);
-			removeDotAtSquare(newSquare);
+			removeFoodItemAtSquare(newSquare);
 			checkPacManDamage();
 		}
 	}
