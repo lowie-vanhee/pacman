@@ -31,8 +31,8 @@ public class MazeMap {
 	 */
 	private boolean[] passable;
 	
-	private int width;
-	private int height;
+	private final int width;
+	private final int height;
 	
 	/**
 	 * Returns the width (i.e. the number of columns) of this maze map.

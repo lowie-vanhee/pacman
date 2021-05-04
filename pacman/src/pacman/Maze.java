@@ -43,33 +43,33 @@ public class Maze {
 		checkPacManDamage();
 	}
 	
-	private void removeFoodItemAtIndex(int index) {
+	public void pacManAtePowerPellet() {
+		for (Ghost ghost : ghosts)
+			ghost.pacManAtePowerPellet();
+	}
+	
+	private void removeFoodItemsAtIndex(int index) {
 		FoodItem[] newFoodItems = new FoodItem[foodItems.length - 1];
 		System.arraycopy(foodItems, 0, newFoodItems, 0, index);
 		System.arraycopy(foodItems, index + 1, newFoodItems, index, newFoodItems.length - index);
 		foodItems = newFoodItems;
 	}
 	
-	private void removeFoodItemAtSquare(Square square) {
+	private void checkFoodItemCollision(Square square) {
 		for (int i = 0; i < foodItems.length; i++) {
 			if (foodItems[i].getSquare().equals(square)) {
 				foodItems[i].eatenByPacMan(this);
-				removeFoodItemAtIndex(i);
+				removeFoodItemsAtIndex(i);
 				return;
 			}
 		}
-	}
-	
-	public void pacManAtePP() {
-		for(int ghostIndex = 0; ghostIndex < ghosts.length; ghostIndex++)
-		{ ghosts[ghostIndex].pacManAtePowerPellet(); }
 	}
 	
 	public void movePacMan(Direction direction) {
 		Square newSquare = pacMan.getSquare().getNeighbor(direction);
 		if (newSquare.isPassable()) {
 			pacMan.setSquare(newSquare);
-			removeFoodItemAtSquare(newSquare);
+			checkFoodItemCollision(newSquare);
 			checkPacManDamage();
 		}
 	}

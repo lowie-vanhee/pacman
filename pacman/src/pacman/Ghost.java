@@ -22,7 +22,7 @@ public class Ghost {
 	private Square square;
 	private Direction direction;
 	
-	private Square originalSquare;
+	private final Square originalSquare;
 	
 	public boolean isVulnerable() {
 		return state.isVulnerable();

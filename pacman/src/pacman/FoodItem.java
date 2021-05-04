@@ -13,7 +13,7 @@ public abstract class FoodItem {
 	/**
 	 * @invar | square != null
 	 */
-	private Square square;
+	private final Square square;
 	
 	/**
 	 * Returns the square where this dot is located
@@ -39,10 +39,10 @@ public abstract class FoodItem {
 	/**
 	 * Returns the size of the FoodItem relative to the size of the dot
 	 * @basic
-	 * @post result >= 0;
+	 * @post result >= 1;
 	 */
 	public abstract int getSize();
 	
-	public abstract void eatenByPacMan(Maze maze);
+	public void eatenByPacMan(Maze maze) {}
 	
 }

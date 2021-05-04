@@ -17,9 +17,9 @@ public class PowerPellet extends FoodItem{
 	public int getSize() {
 		return 2;
 	}
-
+	
 	@Override
 	public void eatenByPacMan(Maze maze) {
-		maze.pacManAtePP();
+		maze.pacManAtePowerPellet();
 	}
 }

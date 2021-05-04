@@ -4,7 +4,10 @@ import java.util.Random;
 
 public class RegularGhostState extends GhostState{
 	
-	public RegularGhostState() {}
+	@Override
+	public boolean isVulnerable() {
+		return false;
+	}
 
 	@Override
 	public GhostState move(Ghost ghost, Random random) {

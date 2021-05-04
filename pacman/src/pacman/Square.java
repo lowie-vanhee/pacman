@@ -30,10 +30,10 @@ public class Square {
 	 * @invar | columnIndex >= 0 && columnIndex < mazeMap.getWidth()
 	 */
 	
-	private MazeMap mazeMap;
+	private final MazeMap mazeMap;
 	
-	private int rowIndex;
-	private int columnIndex;
+	private final int rowIndex;
+	private final int columnIndex;
 	
 	/**
 	 * Returns the (immutable) MazeMap object of which this square is part of
