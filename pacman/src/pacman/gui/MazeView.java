@@ -3,42 +3,51 @@ package pacman.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Arc2D;
+import java.awt.geom.Path2D;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Random;
-import java.util.function.Supplier;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import pacman.Direction;
-import pacman.Dot;
 import pacman.FoodItem;
 import pacman.Ghost;
 import pacman.Maze;
 import pacman.MazeDescriptions;
 import pacman.MazeMap;
+import pacman.Square;
+import pacman.wormholes.ArrivalPortal;
+import pacman.wormholes.DeparturePortal;
+import pacman.wormholes.Wormhole;
 
 public class MazeView extends JPanel {
 	
-	private static int squareSize = 30;
-	private static int lifeSize = squareSize;
-	private static int lifeMargin = 1;
-	private static int dotRadius = squareSize / 10;
-	private static int ghostMoveDelayMillis = 1000;
+	private static final int squareSize = 30;
+	private static final int lifeSize = squareSize;
+	private static final int lifeMargin = 1;
+	private static final int dotRadius = squareSize / 10;
+	private static final int ghostMoveDelayMillis = 1000;
+	private static final Color[] wormholeColors = {Color.cyan, Color.magenta, Color.orange}; // If you change this, also update the key listener!
 
 	private static Image loadSquareImage(String filename) {
 		URL url = MazeView.class.getResource(filename);
 		Image image = Toolkit.getDefaultToolkit().getImage(url);
 		return image.getScaledInstance(squareSize, squareSize, Image.SCALE_SMOOTH);
 	}
-	private static Image pacManImage = loadSquareImage("PacMan.png");
-	private static Image ghostImage = loadSquareImage("ghost.png");
-	private static Image vulnerableGhostImage = loadSquareImage("Vulnerable-ghost.png");
+	private static final Image pacManImage = loadSquareImage("PacMan.png");
+	private static final Image ghostImage = loadSquareImage("ghost.png");
+	private static final Image vulnerableGhostImage = loadSquareImage("Vulnerable-ghost.png");
 	
 	private Maze maze;
 	private MazeMap map;
@@ -68,7 +77,7 @@ public class MazeView extends JPanel {
 	private void initializeMaze() {
 		maze = MazeDescriptions.createMazeFromDescription(new Random(), """
 				#####################
-				#.........#.........#
+				#A........#........D#
 				#.###.###.#.###.###.#
 				#p###.###.#.###.###p#
 				#.###.###.#.###.###.#
@@ -80,7 +89,7 @@ public class MazeView extends JPanel {
 				    #.#   G   #.#    
 				    #.# #   # #.#    
 				#####.# #   # #.#####
-				     .  #GGG#  .     
+				  D  .  #GGG#  .  A  
 				#####.# ##### #.#####
 				    #.#       #.#    
 				    #.# ##### #.#    
@@ -92,9 +101,14 @@ public class MazeView extends JPanel {
 				###.#.#.#####.#.#.###
 				#.....#...#...#.....#
 				#.#######.#.#######.#
-				#...................#
+				#D.................A#
 				#####################
 				""");
+		DeparturePortal[] departurePortals = maze.getDeparturePortals();
+		ArrivalPortal[] arrivalPortals = maze.getArrivalPortals();
+		maze.addWormhole(new Wormhole(departurePortals[0], arrivalPortals[2]));
+		maze.addWormhole(new Wormhole(departurePortals[0], arrivalPortals[0]));
+		maze.addWormhole(new Wormhole(departurePortals[1], arrivalPortals[1]));
 		map = maze.getMap();
 		repaint();
 		startMovingGhosts();
@@ -103,6 +117,48 @@ public class MazeView extends JPanel {
 	private void movePacMan(Direction direction) {
 		maze.movePacMan(direction);
 		mazeChanged();
+	}
+	
+	private void moveWormholeArrivalPortal(Wormhole wormhole) {
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				int column = e.getX() / squareSize;
+				int row = e.getY() / squareSize;
+				if (column < map.getWidth() && row < map.getHeight()) {
+					Square square = Square.of(map, row, column);
+					ArrivalPortal arrivalPortal = Arrays.stream(maze.getArrivalPortals()).filter(p -> p.getSquare().equals(square)).findAny().orElse(null);
+					if (arrivalPortal != null && arrivalPortal != wormhole.getArrivalPortal()) {
+						wormhole.setArrivalPortal(arrivalPortal);
+						repaint();
+					}
+				}
+				removeMouseListener(this);
+			}
+		});
+	}
+	
+	private void moveWormhole(int index) {
+		Wormhole wormhole = maze.getWormholes()[index];
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				int column = e.getX() / squareSize;
+				int row = e.getY() / squareSize;
+				if (column < map.getWidth() && row < map.getHeight()) {
+					Square square = Square.of(map, row, column);
+					DeparturePortal departurePortal = Arrays.stream(maze.getDeparturePortals()).filter(p -> p.getSquare().equals(square)).findAny().orElse(null);
+					if (departurePortal != null) {
+						if (departurePortal != wormhole.getDeparturePortal()) {
+							wormhole.setDeparturePortal(departurePortal);
+							repaint();
+						}
+						moveWormholeArrivalPortal(wormhole);
+					}
+				}
+				removeMouseListener(this);
+			}
+		});
 	}
 	
 	public MazeView() {
@@ -117,6 +173,9 @@ public class MazeView extends JPanel {
 				case KeyEvent.VK_DOWN -> movePacMan(Direction.DOWN);
 				case KeyEvent.VK_LEFT -> movePacMan(Direction.LEFT);
 				case KeyEvent.VK_UP -> movePacMan(Direction.UP);
+				case KeyEvent.VK_C /* cyan */ -> moveWormhole(0);
+				case KeyEvent.VK_M /* magenta */ -> moveWormhole(1);
+				case KeyEvent.VK_O /* orange */ -> moveWormhole(2);
 				}
 			}
 		});
@@ -143,6 +202,22 @@ public class MazeView extends JPanel {
 				if (!map.isPassable(row, column))
 					g.fillRect(squareSize * column, squareSize * row, squareSize, squareSize);
 		
+		// Departure portals
+		g.setColor(Color.green);
+		for (DeparturePortal portal : maze.getDeparturePortals()) {
+			for (int i = 0; i < 3; i++) {
+				g.drawOval(portal.getSquare().getColumnIndex() * squareSize + 3 * i, portal.getSquare().getRowIndex() * squareSize + 3 * i, squareSize - 6 * i, squareSize - 6 * i);
+			}
+		}
+		
+		// Arrival portals
+		g.setColor(Color.red);
+		for (ArrivalPortal portal : maze.getArrivalPortals()) {
+			for (int i = 0; i < 3; i++) {
+				g.drawOval(portal.getSquare().getColumnIndex() * squareSize + 3 * i, portal.getSquare().getRowIndex() * squareSize + 3 * i, squareSize - 6 * i, squareSize - 6 * i);
+			}
+		}
+		
 		// Food items
 		g.setColor(Color.yellow);
 		for (FoodItem foodItem : maze.getFoodItems()) {
@@ -168,6 +243,28 @@ public class MazeView extends JPanel {
 				maze.getPacMan().getSquare().getColumnIndex() * squareSize,
 				maze.getPacMan().getSquare().getRowIndex() * squareSize,
 				this);
+		
+		Graphics2D g2d = (Graphics2D)g;
+		// Wormholes
+		Wormhole[] wormholes = maze.getWormholes();
+		for (int i = 0; i < wormholes.length; i++) {
+			Wormhole wormhole = wormholes[i];
+			Square start = wormhole.getDeparturePortal().getSquare();
+			Square end = wormhole.getArrivalPortal().getSquare();
+			Vector startCenter = new Vector((start.getColumnIndex() + .5) * squareSize, (start.getRowIndex() + .5) * squareSize);
+			Vector endCenter = new Vector((end.getColumnIndex() + .5) * squareSize, (end.getRowIndex() + .5) * squareSize);
+			Vector offset = endCenter.minus(startCenter);
+			double angle = -offset.getAngle();
+			Path2D.Double path = new Path2D.Double();
+			path.append(new Arc2D.Double(startCenter.x - squareSize / 2.0, startCenter.y - squareSize / 2.0, squareSize, squareSize, angle + 90, 180, Arc2D.OPEN), true);
+			path.append(new Arc2D.Double(endCenter.x - squareSize / 2.0, endCenter.y - squareSize / 2.0, squareSize, squareSize, angle - 90, 180, Arc2D.OPEN), true);
+			path.closePath();
+			Color color = wormholeColors[i];
+			g2d.setColor(color);
+			g2d.draw(path);
+			g2d.setColor(new Color(color.getRGB() - 0xC0000000, true));
+			g2d.fill(path);
+		}
 		
 		g.setColor(Color.yellow);
 		// Lives
