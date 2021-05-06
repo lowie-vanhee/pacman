@@ -10,8 +10,8 @@ import logicalcollections.LogicalSet;
 public class Wormhole {
 	
 	/**
-	 * @invar arrival != null
-	 * @invar departure != null
+	 * @invar | arrival != null
+	 * @invar | departure != null
 	 */
 	
 	private DeparturePortal departure;
