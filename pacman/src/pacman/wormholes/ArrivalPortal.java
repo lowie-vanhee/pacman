@@ -18,8 +18,10 @@ public class ArrivalPortal {
 	/**
 	 * @representationObject
 	 * @invar | wormholes != null
+	 * @invar | wormholes.stream().allMatch(w -> w != null && w.getArrivalPortal() == this)
+	 * @peerObjects
 	 */
-	private java.util.Set<Wormhole> wormholes;
+	private java.util.HashSet<Wormhole> wormholes;
 	
 	/**
 	 * @basic 
@@ -48,12 +50,13 @@ public class ArrivalPortal {
 	 * @throws IllegalArgumentException | square == null
 	 * 
 	 * @post | getSquare() == square
-	 *
+	 * @post | getWormholes().isEmpty()
 	 */
 	public ArrivalPortal(Square square)
 	{
 		if(square == null) throw new IllegalArgumentException("square cannot be null");
 		this.square = square;
+		wormholes = new java.util.HashSet<Wormhole>();
 	}
 
 }

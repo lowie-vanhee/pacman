@@ -7,6 +7,7 @@ import pacman.Square;
 /**
  * @invar | getSquare() != null
  * @invar | getWormholes() != null
+ * 
  */
 public class DeparturePortal {
 	
@@ -18,11 +19,14 @@ public class DeparturePortal {
 	/**
 	 * @representationObject
 	 * @invar | wormholes != null
+	 * @invar | wormholes.stream().allMatch(w -> w != null && w.getDeparturePortal() == this)
+	 * @peerObjects
 	 */
-	private java.util.Set<Wormhole> wormholes;
+	private java.util.HashSet<Wormhole> wormholes;
 	
 	/**
 	 * @basic
+	 * @peerObjects
 	 */
 	java.util.Set<Wormhole> getWormholesInternal()
 	{
@@ -39,6 +43,10 @@ public class DeparturePortal {
 	
 	/**
 	 * @basic
+	 * @representationObjects
+	 * @peerObjects
+	 * @creates | result
+	 * @invar | getWormholes() != null
 	 */
 	public java.util.Set<Wormhole> getWormholes()
 	{
@@ -49,11 +57,13 @@ public class DeparturePortal {
 	 * @throws IllegalArgumentException | square == null
 	 * 
 	 * @post | getSquare() == square
+	 * @post | getWormholes().isEmpty()
 	 *
 	 */
 	public DeparturePortal(Square square)
 	{
 		if(square == null) throw new IllegalArgumentException("square cannot be null");
 		this.square = square;
+		wormholes = new java.util.HashSet<Wormhole>();
 	}
 }
