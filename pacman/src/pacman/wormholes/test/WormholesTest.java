@@ -15,6 +15,7 @@ class WormholesTest {
 	@Test
 	void test() {
 		
+		//Deze unit test is nog niet af (duh)
 		boolean[] passable = {	true,  true,  true,
 						  		false, false, true,
 						  		true,  false, true,
@@ -29,7 +30,7 @@ class WormholesTest {
 		ArrivalPortal arrival = new ArrivalPortal(Square.of(map, 1, 0));
 		DeparturePortal departure = new DeparturePortal(Square.of(map, mapHeight-1, mapWidth-1));	
 		
-		Wormhole holeke = new Wormhole(departure, arrival);
+		Wormhole wormhole = new Wormhole(departure, arrival);
 		
 		
 	}
