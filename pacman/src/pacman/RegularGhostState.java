@@ -17,7 +17,12 @@ public class RegularGhostState extends GhostState{
 
 	@Override
 	public GhostState hitBy(Ghost ghost, PacMan pacMan) {
-		pacMan.die();
+		// deze test toegevoegd om een zware bug te fixen
+		if(pacMan.getNbLives() > 0)
+		{
+			pacMan.die(); 
+		}
+		
 		return this;
 	}
 

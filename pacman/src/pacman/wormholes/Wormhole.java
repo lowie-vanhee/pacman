@@ -47,11 +47,21 @@ public class Wormhole {
 	 * 
 	 * @post | getArrivalPortal() == old(getArrivalPortal())
 	 * @post | getDeparturePortal() == departure
+	 * @post If the new departure portal is the same as the current departure portal, then the portal's wormholes set is unaffected
+	 * 		else, the new departure portal's wormholes set is equal to the old set plus this wormhole
+	 * 		and the old departure portal's wormholes is equal to old minus this |
+	 * 
+	 * 		(old(getDeparturePortal()) == departure)?
+	 *  		old(departure.getWormholes()).equals(departure.getWormholes()) : 
+	 *  			departure.getWormholes().equals(LogicalSet.plus(old(departure.getWormholes()), this)) &&
+	 *   			old(getDeparturePortal()).getWormholes().equals(LogicalSet.minus(old(getDeparturePortal().getWormholes()), this))
+	 * 
+	 * @post The arrival portal's wormholes remain exactly the same | old(getArrivalPortal().getWormholes()).equals(getArrivalPortal().getWormholes())
 	 */
 	public void setDeparturePortal(DeparturePortal departure)
 	{
 		if(departure == null) throw new IllegalArgumentException("Departure cannot be null");
-		//--Hier nog testen of de nieuwe departure portal niet de huidige is ? ma vo maximale punte ni teste => ingewikkelde docs--
+		
 		this.departure.getWormholesInternal().remove(this);
 		this.departure = departure;
 		departure.getWormholesInternal().add(this);
