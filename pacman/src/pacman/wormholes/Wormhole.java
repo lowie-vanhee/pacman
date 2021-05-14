@@ -111,7 +111,7 @@ public class Wormhole {
 	 * @throws IllegalArgumentException | departure == null
 	 * @throws IllegalArgumentException | arrival == null
 	 * 
-	 * @mutates | departure, arrival
+	 * @mutates_properties | this.getDeparturePortal(), this.getArrivalPortal(), departure.getWormholes(), arrival.getWormholes()
 	 * 
 	 * @post | getDeparturePortal() == departure
 	 * @post | getArrivalPortal() == arrival

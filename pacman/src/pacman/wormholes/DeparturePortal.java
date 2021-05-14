@@ -85,6 +85,8 @@ public class DeparturePortal {
 	/**
 	 * @throws IllegalArgumentException | square == null
 	 * 
+	 * @mutates_properties | this.getWormholes()
+	 * 
 	 * @post | getSquare() == square
 	 * @post | getWormholes().isEmpty()
 	 *
